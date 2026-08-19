@@ -55,10 +55,10 @@ export default function IntroPage() {
     }, TRANSITION_MS);
   }
 
-  // Step 1 — auto-advance after 2.5s
+  // Step 1 — 2s clip-path reveal, then hold 1s, then auto-advance
   useEffect(() => {
     if (step !== 1) return;
-    const t = setTimeout(() => goTo(() => setStep(2)), 2500);
+    const t = setTimeout(() => goTo(() => setStep(2)), 3000);
     return () => clearTimeout(t);
   }, [step]);
 
@@ -164,9 +164,9 @@ function StepLogo() {
   return (
     <section className="flex flex-1 items-center justify-center px-6">
       <div
-        className="opacity-0"
         style={{
-          animation: "logo-reveal 2s ease-out forwards",
+          clipPath: "inset(0 100% 0 0)",
+          animation: "logo-reveal-clip 2s ease-out forwards",
         }}
       >
         <Image
