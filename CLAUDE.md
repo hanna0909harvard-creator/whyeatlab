@@ -69,8 +69,9 @@ Next.js 16 App Router, TypeScript, Tailwind CSS v4, React 19.
 - `src/app/api/send-survey/route.ts` — POST endpoint used by the intro
   flow's step 6. Sends the survey (name/email/message/selected
   categories/answers) to `whyeatlab@gmail.com` via Resend, from
-  `onboarding@resend.dev` (Resend's shared sender — swap once a custom
-  domain is verified). Requires `RESEND_API_KEY` in `.env.local`; returns a
+  `onboarding@whyeatlab.com` (requires the `whyeatlab.com` domain to be
+  verified in the Resend dashboard, since Resend rejects sends from an
+  unverified domain). Requires `RESEND_API_KEY` in `.env.local`; returns a
   500 with a clear JSON error if it's unset rather than throwing, since
   local dev won't always have a real key configured.
 - `/home` — homepage with hero, brand intro, testimonials, and CTA
