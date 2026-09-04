@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import FadeInSection from "@/components/FadeInSection";
+import { articles } from "@/app/newspaper/articles";
 
 const TESTIMONIAL = {
   quote:
@@ -9,12 +10,7 @@ const TESTIMONIAL = {
   relation: "daughter",
 };
 
-const ARTICLE_PREVIEW = {
-  date: "September 4, 2026",
-  title: "Why do we eat?",
-  preview:
-    "Eating should be done when we are truly hungry, feeling genuine hunger.",
-};
+const featuredArticle = articles[0];
 
 export default function HomePage() {
   return (
@@ -106,13 +102,13 @@ export default function HomePage() {
 
         <FadeInSection>
           <div className="py-8">
-            <p className="text-xs text-muted">{ARTICLE_PREVIEW.date}</p>
-            <h3 className="mt-2 text-lg">{ARTICLE_PREVIEW.title}</h3>
+            <p className="text-xs text-muted">{featuredArticle.date}</p>
+            <h3 className="mt-2 text-lg">{featuredArticle.title}</h3>
             <p className="mt-2 text-sm text-muted">
-              {ARTICLE_PREVIEW.preview}
+              {featuredArticle.preview}
             </p>
             <Link
-              href="/newspaper"
+              href={`/newspaper/${featuredArticle.slug}`}
               className="mt-4 inline-block text-sm text-neutral-700 transition-colors hover:text-black"
             >
               Read →

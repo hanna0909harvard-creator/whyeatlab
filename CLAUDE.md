@@ -102,21 +102,27 @@ Next.js 16 App Router, TypeScript, Tailwind CSS v4, React 19.
   (`bg-cream`, `#faf9f6`), thin `border-divider` (`#d0ccc4`, 0.5px) lines
   between every section. Five sections in order: hero logo (fades in on
   load, links to `/intro` via "begin the survey"), a single testimony,
-  brand-intro tagline, newspaper preview (links to `/newspaper`), then the
-  global `Footer`. There is no founder section. Sections 2+ use
-  `FadeInSection` for scroll-triggered reveals; the hero uses the
-  mount-based
-  `fade-in-opacity` keyframe instead, same pattern as `/intro` step 1.
+  brand-intro tagline, newspaper preview (links to the featured article's
+  own page), then the global `Footer`. There is no founder section.
+  Sections 2+ use `FadeInSection` for scroll-triggered reveals; the hero
+  uses the mount-based `fade-in-opacity` keyframe instead, same pattern as
+  `/intro` step 1.
 - `/how-we-work` — static brand philosophy content (already final copy, not
   placeholder).
-- `/newspaper` — single centered article (no sidebar, no thumbnails): date,
-  36px serif title, then body copy at 18px/1.9 line-height capped at
-  680px, closing with a right-aligned italic attribution line. Content is
-  real (not placeholder) — the `ARTICLE` object holds one real essay,
-  mirrored (title/date/first-sentence preview) in `/home`'s newspaper
-  preview section via a separate `ARTICLE_PREVIEW` object in
-  `src/app/home/page.tsx`. Keep those two in sync by hand if the article
-  changes.
+- `/newspaper` — real content (not placeholder), backed by
+  `src/app/newspaper/articles.ts` (the `articles` array, each with
+  `slug`/`title`/`date`/`preview`/`content`/`closing`) — the single source
+  of truth for article data. To add an article, just append to that
+  array; nothing else needs updating. `/newspaper/page.tsx` lists every
+  article as a preview card (date, 28px title, 16px preview, "Read →").
+  `/newspaper/[slug]/page.tsx` is the dynamic per-article route
+  (`generateStaticParams` pre-renders one static page per slug at build
+  time; `notFound()` for an unknown slug): date, 40px title, divider, body
+  at 18px/1.9 line-height capped at 680px (paragraphs split from
+  `content` on blank lines), closing with a right-aligned italic
+  attribution line, "← Back to Newspaper" at top. `/home`'s newspaper
+  preview section imports `articles` directly (`featuredArticle =
+  articles[0]`) rather than duplicating any article data.
 - `/contact` — dark sage block with mailto link (`whyeatlab@gmail.com`)
   beside the `ContactForm` component.
 - `/product` — placeholder only, to be designed later.
