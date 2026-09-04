@@ -55,10 +55,17 @@ export default function IntroPage() {
     }, TRANSITION_MS);
   }
 
-  // Step 1 — 2s clip-path reveal, then hold 1s, then auto-advance
+  // Marks the intro as completed so the root route sends returning visitors
+  // straight to /home instead of back through the survey.
+  function finishIntro() {
+    document.cookie = "intro_completed=1; path=/; max-age=31536000";
+    router.push("/home");
+  }
+
+  // Step 1 — 1.5s fade-in, then auto-advance at 2.5s total
   useEffect(() => {
     if (step !== 1) return;
-    const t = setTimeout(() => goTo(() => setStep(2)), 3000);
+    const t = setTimeout(() => goTo(() => setStep(2)), 2500);
     return () => clearTimeout(t);
   }, [step]);
 
@@ -73,13 +80,6 @@ export default function IntroPage() {
       setTimeout(() => setShowEnter(true), 2800),
     ];
     return () => timers.forEach(clearTimeout);
-  }, [step]);
-
-  // Step 5 — auto-advance to Step 6 after 4s
-  useEffect(() => {
-    if (step !== 5) return;
-    const t = setTimeout(() => goTo(() => setStep(6)), 4000);
-    return () => clearTimeout(t);
   }, [step]);
 
   function toggleCategory(id: CategoryId) {
@@ -151,8 +151,8 @@ export default function IntroPage() {
           <StepEmailForm
             selectedCategories={selectedCategories}
             answers={answers}
-            onSkip={() => router.push("/home")}
-            onSubmitted={() => router.push("/home")}
+            onSkip={finishIntro}
+            onSubmitted={finishIntro}
           />
         )}
       </div>
@@ -165,17 +165,16 @@ function StepLogo() {
     <section className="flex flex-1 items-center justify-center px-6">
       <div
         style={{
-          clipPath: "inset(0 100% 0 0)",
-          animation: "logo-reveal-clip 2s ease-out forwards",
+          animation: "fade-in-opacity 1.5s ease-in-out forwards",
         }}
       >
         <Image
-          src="/whyeatlablogo_nobg.png"
+          src="/whyeatnewlogo-nobg.png"
           alt="Why Eat Logo"
-          width={612}
-          height={408}
+          width={834}
+          height={299}
           priority
-          className="h-auto w-[60vw]"
+          className="h-auto w-[80vw] max-w-[700px]"
         />
       </div>
     </section>
@@ -246,14 +245,17 @@ function StepCategory({
               <button
                 type="button"
                 onClick={() => onToggle(category.id)}
-                className={`text-2xl transition-colors duration-200 sm:text-3xl ${
-                  isSelected
-                    ? "underline decoration-1 underline-offset-4"
-                    : "hover:underline hover:decoration-1 hover:underline-offset-4"
-                }`}
+                className="text-2xl sm:text-3xl"
               >
-                {isSelected ? "✓ " : ""}
-                {category.label}
+                <span
+                  className={`inline-block transition-[font-size,font-weight] duration-150 ease-out ${
+                    isSelected
+                      ? "text-[1.15em] font-medium"
+                      : "text-[1em] font-normal"
+                  }`}
+                >
+                  {category.label}
+                </span>
               </button>
             </li>
           );
@@ -310,34 +312,57 @@ function StepQuestion({
 }
 
 function StepClosing({ onContinue }: { onContinue: () => void }) {
-  const text = `We can categorize you, but we don't want.
-Traditional marketing always tries to fit you into a neat category for its own convenience.
-
-But you are a human being, not a commodity.
-You are a living, breathing entity constantly changing every second.
-
-          You are a human, not a program
-                    not a machine
-                    not a object.
-
-          Complexity is you dignity, not errors.`;
-
   return (
-    <section className="flex flex-1 flex-col items-center justify-center gap-12 px-8 py-16 text-center sm:px-16">
-      <p
-        className="max-w-2xl text-xl leading-relaxed sm:text-2xl"
-        style={{ whiteSpace: "pre-wrap" }}
+    <section
+      role="button"
+      tabIndex={0}
+      onClick={onContinue}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") onContinue();
+      }}
+      className="flex flex-1 cursor-pointer flex-col items-center justify-center px-8 py-16 sm:px-16"
+    >
+      <div
+        className="mx-auto max-w-md sm:max-w-lg"
+        style={{ textAlign: "center", fontSize: "18px", fontWeight: 400, lineHeight: 2 }}
       >
-        {text}
-      </p>
+        <p style={{ margin: 0, marginBottom: "0.8rem" }}>
+          We can categorize you, but we don&apos;t want.
+        </p>
+        <p
+          className="text-muted"
+          style={{ margin: 0, marginBottom: "0.8rem", fontSize: "smaller" }}
+        >
+          Traditional marketing always tries to fit you into a neat category
+          for its own convenience.
+        </p>
 
-      <button
-        type="button"
-        onClick={onContinue}
-        className="text-lg transition-opacity duration-300 hover:opacity-60"
-      >
-        →
-      </button>
+        <p style={{ margin: 0, marginBottom: "0.8rem" }}>
+          But you are a human being, not a commodity.
+        </p>
+        <p style={{ margin: 0, marginBottom: "0.8rem" }}>
+          You are a living, breathing entity constantly changing every
+          second.
+        </p>
+
+        <div
+          style={{
+            display: "inline-block",
+            textAlign: "left",
+            fontWeight: 500,
+            lineHeight: 1.6,
+            marginBottom: "0.8rem",
+          }}
+        >
+          <p style={{ margin: 0 }}>You are a human, not a program</p>
+          <p style={{ margin: 0, paddingLeft: "126.3px" }}>not a machine</p>
+          <p style={{ margin: 0, paddingLeft: "126.3px" }}>not a object.</p>
+        </div>
+
+        <p style={{ margin: 0 }}>Complexity is you dignity, not errors.</p>
+      </div>
+
+      <p className="mt-16 text-[11px] text-muted">tap to continue</p>
     </section>
   );
 }

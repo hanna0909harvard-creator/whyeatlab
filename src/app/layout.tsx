@@ -1,18 +1,13 @@
 import type { Metadata } from "next";
-import { Caveat, EB_Garamond } from "next/font/google";
-import Navbar from "@/components/Navbar";
+import { EB_Garamond } from "next/font/google";
+import Footer from "@/components/Footer";
+import PageTransition from "@/components/PageTransition";
 import "./globals.css";
 
 const serifBody = EB_Garamond({
   variable: "--font-serif-body",
   subsets: ["latin"],
   weight: ["400", "500", "600"],
-});
-
-const scriptLogo = Caveat({
-  variable: "--font-script-logo",
-  subsets: ["latin"],
-  weight: ["500", "600", "700"],
 });
 
 export const metadata: Metadata = {
@@ -29,11 +24,11 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${serifBody.variable} ${scriptLogo.variable} h-full antialiased`}
+      className={`${serifBody.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-white text-neutral-900 font-sans">
-        <Navbar />
-        <main className="flex-1">{children}</main>
+        <PageTransition>{children}</PageTransition>
+        <Footer />
       </body>
     </html>
   );

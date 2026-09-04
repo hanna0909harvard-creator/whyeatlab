@@ -9,7 +9,6 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-serif-body);
-  --font-script: var(--font-script-logo);
 
   --color-sage-50: #f4f6f0;
   --color-sage-100: #e6ebdd;
@@ -21,6 +20,10 @@
   --color-sage-700: #495838;
   --color-sage-800: #37432b;
   --color-sage-900: #262f1e;
+
+  --color-cream: #faf9f6;
+  --color-divider: #d0ccc4;
+  --color-muted: #8b8579;
 }
 
 body {
@@ -39,11 +42,11 @@ body {
   }
 }
 
-@keyframes logo-reveal-clip {
+@keyframes fade-in-opacity {
   from {
-    clip-path: inset(0 100% 0 0);
+    opacity: 0;
   }
   to {
-    clip-path: inset(0 0 0 0);
+    opacity: 1;
   }
 }

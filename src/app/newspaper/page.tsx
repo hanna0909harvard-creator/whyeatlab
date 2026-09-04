@@ -1,90 +1,44 @@
-const ARTICLES = [
-  {
-    title: "Why we eat when we are not hungry",
-    date: "June 12, 2026",
-  },
-  {
-    title: "The nervous system and the plate",
-    date: "May 28, 2026",
-  },
-  {
-    title: "Understanding emotional hunger",
-    date: "May 9, 2026",
-  },
-  {
-    title: "Redesigning the sense of taste",
-    date: "April 20, 2026",
-  },
-];
-
-const UPDATES = [
-  {
-    title: "New cohort opens for enrollment",
-    date: "July 1, 2026",
-  },
-  {
-    title: "Why Eat lab studio, coming soon",
-    date: "June 15, 2026",
-  },
-  {
-    title: "A note from the founders",
-    date: "May 30, 2026",
-  },
-];
-
-function Thumbnail() {
-  return (
-    <div
-      aria-hidden
-      className="aspect-[4/3] w-full flex-shrink-0 rounded-sm bg-sage-100"
-    />
-  );
-}
+const ARTICLE = {
+  title: "Why do we eat?",
+  date: "September 4, 2026",
+  paragraphs: [
+    "Eating should be done when we are truly hungry, feeling genuine hunger.",
+    "Yet, I was stressed out again today, and I ended up eating. It was unbearable to endure the emptiness of my emotions, so I ate and ate, even glucose syrup.",
+    "However, those things made my heart even heavier. The three seconds of pleasure as the glucose syrup went down left an artificial taste on my tongue, serving as a link that invited another Coke, which in turn triggered a chain reaction calling for spicy flavors. After eating spicy Buldak, I drank sweet Coke again, then had salty chips packed with chemical flavors. In the end, a disaster that could have been prevented by just drinking two cups of water turned into a two-hour binge. Ah, how sad. Why am I like this?",
+    "The sequence and habits of eating during times of stress are crucial because they dictate how the brain is triggered. I cannot explain it scientifically, so I will put it in my own terms. If I had drunk hot water packed with sea salt and lemon when stressed, I would not have reached a double- no, triple stress level, filled to bursting like I am right now as I write this. The electrolytes in the salt and the tangy bite of the lemon would have brought a fresh sensation to my brain and my angry organs—especially my liver—putting a stop to this hours-long relay feast of glucose syrup. Why do we eat? Track your mouth's reactions during times of stress for one month.",
+    "I will start this one-month tracking first.",
+  ],
+  closing: "— Clutching my stomach, which feels like it's about to burst",
+};
 
 export default function NewspaperPage() {
   return (
     <div className="mx-auto max-w-6xl px-6 py-16 sm:px-10 sm:py-24">
-      <h1 className="mb-12 text-4xl font-medium sm:text-5xl">Newspaper</h1>
+      <h1 className="mb-16 text-4xl font-medium sm:text-5xl">
+        Why Eat: Newspaper
+      </h1>
 
-      <div className="grid grid-cols-1 gap-16 lg:grid-cols-3">
-        <section className="lg:col-span-2">
-          <h2 className="mb-6 text-sm font-medium uppercase tracking-widest text-sage-700">
-            Articles
-          </h2>
-          <div className="grid grid-cols-1 gap-x-8 gap-y-10 sm:grid-cols-2">
-            {ARTICLES.map((article) => (
-              <article key={article.title} className="flex flex-col gap-3">
-                <Thumbnail />
-                <h3 className="text-lg font-medium leading-snug">
-                  {article.title}
-                </h3>
-                <p className="text-sm text-neutral-500">{article.date}</p>
-              </article>
-            ))}
-          </div>
-        </section>
+      <article className="mx-auto max-w-[680px] py-16 sm:py-24">
+        <p className="text-sm text-muted">{ARTICLE.date}</p>
+        <h2 className="mt-3 text-[36px] font-medium leading-snug">
+          {ARTICLE.title}
+        </h2>
 
-        <section>
-          <h2 className="mb-6 text-sm font-medium uppercase tracking-widest text-sage-700">
-            Updates
-          </h2>
-          <div className="flex flex-col gap-8">
-            {UPDATES.map((update) => (
-              <article key={update.title} className="flex gap-4">
-                <div className="w-20 flex-shrink-0">
-                  <Thumbnail />
-                </div>
-                <div className="flex flex-col gap-2">
-                  <h3 className="text-base font-medium leading-snug">
-                    {update.title}
-                  </h3>
-                  <p className="text-sm text-neutral-500">{update.date}</p>
-                </div>
-              </article>
-            ))}
-          </div>
-        </section>
-      </div>
+        <div
+          className="mt-12 text-neutral-900"
+          style={{ fontSize: "18px", lineHeight: 1.9 }}
+        >
+          {ARTICLE.paragraphs.map((paragraph, i) => (
+            <p key={i} className={i > 0 ? "mt-6" : ""}>
+              {paragraph}
+            </p>
+          ))}
+        </div>
+
+        <p className="mt-10 text-right text-base italic text-muted">
+          {ARTICLE.closing}
+        </p>
+      </article>
     </div>
   );
 }
