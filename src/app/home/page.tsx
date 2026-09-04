@@ -5,7 +5,7 @@ import { articles } from "@/app/newspaper/articles";
 
 const TESTIMONIAL = {
   quote:
-    "From my own life experience, I can say with confidence that what she does truly works. I know why I'm eating, and I can feel in my body how food works with me. I'm not suppressing my desire for unhealthy food; I'm actively choosing to step away from it. Once you experience her, you will undoubtedly feel the difference.",
+    "From my own life experience, I can say with confidence that what she does truly works. I know why I'm eating, and I can feel in my body how food works with me. I'm not suppressing my desire for unhealthy food; I'm actively not choosing. Once you experience her, you will undoubtedly feel the difference.",
   name: "— Hanna",
   relation: "daughter",
 };
