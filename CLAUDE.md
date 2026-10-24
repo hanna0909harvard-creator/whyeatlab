@@ -29,12 +29,16 @@ type-check the whole project (`tsc` runs as part of the build step).
 Next.js 16 App Router, TypeScript, Tailwind CSS v4, React 19.
 
 - Routes live under `src/app/<route>/page.tsx`. `src/app/page.tsx` (the `/`
-  root) is an async Server Component that reads the `intro_completed`
-  cookie via `next/headers` `cookies()` and redirects to `/home` if it's
-  set, otherwise to `/intro` — so first-time visitors land on the
-  onboarding flow, but returning visitors who've already been through it
-  skip straight to `/home`. `/intro` (`finishIntro()`) sets that cookie
-  (1-year `max-age`) right before navigating away, on both "Skip" and a
+  root) is a client component (`"use client"`) that checks
+  `localStorage.getItem("whyeat_survey_done")` inside a `useEffect` and
+  `router.replace()`s to `/home` if it's `"true"`, otherwise to `/intro` —
+  so first-time visitors land on the onboarding flow, but returning
+  visitors who've already been through it skip straight to `/home`. The
+  check is deliberately client-only (inside `useEffect`, not read during
+  render) so the static-rendered shell doesn't depend on `localStorage` at
+  all — avoids a hydration mismatch, at the cost of a brief blank
+  (`bg-cream`) flash before the redirect fires. `/intro` (`finishIntro()`)
+  sets that flag right before navigating away, on both "Skip" and a
   successful submit in step 6 — reaching the end of the flow counts as
   "completed" either way. The homepage is a named route (`/home`), not the
   root, so it lines up with the "Home" nav link; visiting `/home` directly
@@ -87,9 +91,19 @@ Next.js 16 App Router, TypeScript, Tailwind CSS v4, React 19.
   multi-select; `buildQuestionQueue()` flattens every selected category's
   questions, in `CATEGORIES` order, into one queue for step 4. Category and
   question data lives in `src/lib/introCategories.ts`, shared with the API
-  route below so question/option text isn't duplicated. Ends with an email
-  capture form (step 6) that posts to `/api/send-survey`, then redirects to
-  `/home` (auto after 2s post-submit, or immediately via "Skip").
+  route below so question/option text isn't duplicated. `StepQuestion`
+  appends an `OTHER_OPTION` ("Other (write your own)") after every
+  question's options at render time — it's not part of the data in
+  `introCategories.ts`. Picking it reveals an underline-only text input
+  (optional; Enter or the small "→" button confirms); the saved answer is
+  the typed text, or the literal string `"Other"` if left blank — either
+  way it's stored in `answers` exactly like a normal option, so no changes
+  were needed in `selectAnswer()` or the API route for it to show up in
+  the survey email. `StepQuestion` is given a `key` (category + question
+  index) so this local "Other" state resets between questions. Ends with
+  an email capture form (step 6) that posts to `/api/send-survey`, then
+  redirects to `/home` (auto after 2s post-submit, or immediately via
+  "Skip").
 - `src/app/api/send-survey/route.ts` — POST endpoint used by the intro
   flow's step 6. Sends the survey (name/email/message/selected
   categories/answers) to `whyeatlab@gmail.com` via Resend, from

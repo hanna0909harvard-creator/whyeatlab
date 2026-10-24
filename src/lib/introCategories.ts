@@ -126,7 +126,7 @@ export const CATEGORIES: Category[] = [
   },
   {
     id: "BORING",
-    label: "Boring",
+    label: "Bored",
     questions: [
       {
         text: "When do you feel bored and eat?",
@@ -143,7 +143,7 @@ export const CATEGORIES: Category[] = [
     label: "Emotion",
     questions: [
       {
-        text: "When which emotion do you want to fill yourself?",
+        text: "Which emotion makes you want to fill yourself?",
         options: [
           "① When I'm sad",
           "② When I'm angry",

@@ -56,9 +56,11 @@ export default function IntroPage() {
   }
 
   // Marks the intro as completed so the root route sends returning visitors
-  // straight to /home instead of back through the survey.
+  // straight to /home instead of back through the survey. Used for both
+  // "Skip" and a successful submit in step 6 — reaching the end of the
+  // flow counts as "done" either way.
   function finishIntro() {
-    document.cookie = "intro_completed=1; path=/; max-age=31536000";
+    localStorage.setItem("whyeat_survey_done", "true");
     router.push("/home");
   }
 
@@ -140,7 +142,11 @@ export default function IntroPage() {
         )}
 
         {step === 4 && currentQuestionItem && (
-          <StepQuestion item={currentQuestionItem} onAnswer={selectAnswer} />
+          <StepQuestion
+            key={`${currentQuestionItem.categoryId}-${currentQuestionItem.questionIndex}`}
+            item={currentQuestionItem}
+            onAnswer={selectAnswer}
+          />
         )}
 
         {step === 5 && (
@@ -278,6 +284,8 @@ function StepCategory({
   );
 }
 
+const OTHER_OPTION = "Other (write your own)";
+
 function StepQuestion({
   item,
   onAnswer,
@@ -285,6 +293,13 @@ function StepQuestion({
   item: FlatQuestion;
   onAnswer: (option: string) => void;
 }) {
+  const [otherSelected, setOtherSelected] = useState(false);
+  const [otherText, setOtherText] = useState("");
+
+  function confirmOther() {
+    onAnswer(otherText.trim() || "Other");
+  }
+
   return (
     <section className="flex flex-1 flex-col justify-center gap-10 px-8 py-16 sm:px-16">
       <p className="text-sm uppercase tracking-widest text-black/50">
@@ -306,6 +321,38 @@ function StepQuestion({
             {option}
           </button>
         ))}
+
+        <button
+          type="button"
+          onClick={() => setOtherSelected(true)}
+          className="w-fit text-left text-xl text-black/50 transition-colors duration-200 hover:text-black/80 hover:underline sm:text-2xl"
+        >
+          {OTHER_OPTION}
+        </button>
+
+        {otherSelected && (
+          <div className="flex items-center gap-3 pl-0">
+            <input
+              type="text"
+              autoFocus
+              value={otherText}
+              onChange={(e) => setOtherText(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") confirmOther();
+              }}
+              placeholder="Type your answer…"
+              className="w-full max-w-sm border-0 border-b border-black/30 bg-transparent py-1 text-lg outline-none focus:border-black sm:text-xl"
+            />
+            <button
+              type="button"
+              onClick={confirmOther}
+              aria-label="Confirm answer"
+              className="text-xl text-black/60 transition-colors hover:text-black"
+            >
+              →
+            </button>
+          </div>
+        )}
       </div>
     </section>
   );
@@ -327,7 +374,7 @@ function StepClosing({ onContinue }: { onContinue: () => void }) {
         style={{ textAlign: "center", fontSize: "18px", fontWeight: 400, lineHeight: 2 }}
       >
         <p style={{ margin: 0, marginBottom: "0.8rem" }}>
-          We can categorize you, but we don&apos;t want.
+          We can categorize you, but we don&apos;t want to.
         </p>
         <p
           className="text-muted"
@@ -356,10 +403,10 @@ function StepClosing({ onContinue }: { onContinue: () => void }) {
         >
           <p style={{ margin: 0 }}>You are a human, not a program</p>
           <p style={{ margin: 0, paddingLeft: "126.3px" }}>not a machine</p>
-          <p style={{ margin: 0, paddingLeft: "126.3px" }}>not a object.</p>
+          <p style={{ margin: 0, paddingLeft: "126.3px" }}>not an object.</p>
         </div>
 
-        <p style={{ margin: 0 }}>Complexity is you dignity, not errors.</p>
+        <p style={{ margin: 0 }}>Complexity is your dignity, not errors.</p>
       </div>
 
       <p className="mt-16 text-[11px] text-muted">tap to continue</p>
@@ -407,7 +454,7 @@ function StepEmailForm({
       if (!res.ok) throw new Error("Failed to send");
 
       setStatus("sent");
-      setTimeout(onSubmitted, 2000);
+      setTimeout(onSubmitted, 1500);
     } catch {
       setStatus("error");
     }
@@ -415,10 +462,8 @@ function StepEmailForm({
 
   if (status === "sent") {
     return (
-      <section className="flex flex-1 flex-col items-center justify-center px-8 text-center">
-        <p className="text-2xl sm:text-3xl">
-          Thank you. See you on the other side.
-        </p>
+      <section className="flex flex-1 items-center justify-center px-8 text-center">
+        <p className="text-5xl sm:text-6xl">sent.</p>
       </section>
     );
   }

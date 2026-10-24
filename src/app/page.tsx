@@ -1,8 +1,16 @@
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
+"use client";
 
-export default async function RootPage() {
-  const cookieStore = await cookies();
-  const hasCompletedIntro = cookieStore.get("intro_completed")?.value === "1";
-  redirect(hasCompletedIntro ? "/home" : "/intro");
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+
+export default function RootPage() {
+  const router = useRouter();
+
+  useEffect(() => {
+    const hasVisitedBefore =
+      localStorage.getItem("whyeat_survey_done") === "true";
+    router.replace(hasVisitedBefore ? "/home" : "/intro");
+  }, [router]);
+
+  return <div className="min-h-screen bg-cream" />;
 }
