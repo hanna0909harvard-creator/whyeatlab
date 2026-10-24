@@ -25,6 +25,36 @@ The sequence and habits of eating during times of stress are crucial because the
 I will start this one-month tracking first.`,
     closing: "— Clutching my stomach, which feels like it's about to burst",
   },
+  {
+    slug: "life-energy-and-nutritional-energy",
+    title: "Life Energy and Nutritional Energy",
+    date: "October 23, 2026",
+    preview:
+      "Are life energy and nutritional energy the same? What is the difference between looking at something through the concept of nutritional energy and looking at it through the concept of life energy?",
+    content: `Are life energy and nutritional energy the same?
+What is the difference between looking at something through the concept of nutritional energy and looking at it through the concept of life energy?
+
+Let me give an example.
+Farmer A runs an egg business, selling eggs at the market.
+He runs a cage-free farm.
+Since the hens are raised indoors, they don't have to go outside. Square feet is required per hen.
+They are simply raised indoors, eating feed.
+Either way, it can meet the standard of being an "egg."
+Since it comes out in the form of an egg, you can call it an egg.
+
+However, the egg I'm looking for is a complete food: amino acids, cysteine, biotin, meaning good-quality biotin and selenium, the real living nutrients passed on to the hen by earthworms that grew up eating soil. To eat those, it has to be that kind of egg. That is the egg I'm looking for.
+Not eggs laid by hens raised on feed made in a factory from artificial nutrients.
+
+It's an egg from a hen that runs around the grass in the morning, on grass with no herbicide sprayed on it. A hen that grew up on soil rich in earthworms, eating grass and bugs.
+All nutrition comes from soil in the end. We are soil. So we are eating soil. That is the essence, in the end.
+
+But things raised from a "nutrition" point of view are just nutritional feed. For hens raised locked up indoors, the strange phrase "cage-free" is used. It's language that creates a strange illusion that these hens weren't raised confined.
+
+But does a hen that grew up never leaving a big space, a house, have any life energy? The life energy of a hen that runs around outside, gets plenty of sunlight, makes noise, and hunts bugs to eat... and "cage-free" by itself just means a hen raised inside a house...
+
+I want to eat real eggs filled with life energy.`,
+    closing: "",
+  },
 ];
 
 export function getArticleBySlug(slug: string): Article | undefined {

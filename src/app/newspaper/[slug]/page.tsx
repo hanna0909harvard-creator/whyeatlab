@@ -42,15 +42,21 @@ export default async function ArticlePage({
           style={{ fontSize: "18px", lineHeight: 1.9 }}
         >
           {paragraphs.map((paragraph, i) => (
-            <p key={i} className={i > 0 ? "mt-6" : ""}>
+            <p
+              key={i}
+              className={i > 0 ? "mt-6" : ""}
+              style={{ whiteSpace: "pre-line" }}
+            >
               {paragraph}
             </p>
           ))}
         </div>
 
-        <p className="mt-10 text-right text-base italic text-muted">
-          {article.closing}
-        </p>
+        {article.closing && (
+          <p className="mt-10 text-right text-base italic text-muted">
+            {article.closing}
+          </p>
+        )}
       </article>
     </div>
   );
