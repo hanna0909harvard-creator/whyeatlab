@@ -1,9 +1,15 @@
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { articles, getArticleBySlug } from "../articles";
 
 export function generateStaticParams() {
-  return articles.map((article) => ({ slug: article.slug }));
+  // Card-news articles have their own dedicated page at
+  // src/app/newspaper/<slug>/page.tsx (which Next.js matches first anyway,
+  // since static segments win over this dynamic one) — excluded here so
+  // this route only pre-renders the plain-text articles it can display.
+  return articles
+    .filter((article) => !article.cardNews)
+    .map((article) => ({ slug: article.slug }));
 }
 
 export default async function ArticlePage({
@@ -16,6 +22,13 @@ export default async function ArticlePage({
 
   if (!article) {
     notFound();
+  }
+
+  if (article.cardNews) {
+    // Shouldn't normally be reached (the dedicated page intercepts the
+    // URL first) — safety net in case a cardNews article is ever added
+    // without one.
+    redirect("/newspaper");
   }
 
   const paragraphs = article.content.split("\n\n");

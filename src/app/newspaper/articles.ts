@@ -5,9 +5,23 @@ export type Article = {
   preview: string;
   content: string;
   closing: string;
+  // Card-news articles (vertical scroll of designed cards) render via a
+  // dedicated page at src/app/newspaper/<slug>/page.tsx instead of the
+  // plain-text layout in [slug]/page.tsx — content/closing stay empty.
+  cardNews?: boolean;
 };
 
 export const articles: Article[] = [
+  {
+    slug: "nates-brain-part1",
+    title: "Nate's Brain — Part 1: The Coffee Shock",
+    date: "October 28, 2026",
+    preview:
+      "Are we drinking coffee, or are we soothing a brain that has lost its ability to self-recover?",
+    content: "",
+    closing: "",
+    cardNews: true,
+  },
   {
     slug: "why-do-we-eat",
     title: "Why do we eat?",

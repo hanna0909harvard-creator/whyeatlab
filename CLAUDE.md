@@ -125,18 +125,41 @@ Next.js 16 App Router, TypeScript, Tailwind CSS v4, React 19.
   placeholder).
 - `/newspaper` — real content (not placeholder), backed by
   `src/app/newspaper/articles.ts` (the `articles` array, each with
-  `slug`/`title`/`date`/`preview`/`content`/`closing`) — the single source
-  of truth for article data. To add an article, just append to that
-  array; nothing else needs updating. `/newspaper/page.tsx` lists every
-  article as a preview card (date, 28px title, 16px preview, "Read →").
-  `/newspaper/[slug]/page.tsx` is the dynamic per-article route
-  (`generateStaticParams` pre-renders one static page per slug at build
-  time; `notFound()` for an unknown slug): date, 40px title, divider, body
-  at 18px/1.9 line-height capped at 680px (paragraphs split from
-  `content` on blank lines), closing with a right-aligned italic
-  attribution line, "← Back to Newspaper" at top. `/home`'s newspaper
-  preview section imports `articles` directly (`featuredArticle =
-  articles[0]`) rather than duplicating any article data.
+  `slug`/`title`/`date`/`preview`/`content`/`closing`, plus optional
+  `cardNews?: boolean`) — the single source of truth for article
+  *metadata*. To add a plain-text article, just append to that array (with
+  `content`/`closing` filled in); nothing else needs updating.
+  `/newspaper/page.tsx` lists every article as a preview card (date, 28px
+  title, 16px preview, "Read →") using only `date`/`title`/`preview`/
+  `slug`, so it renders card-news entries the same way with no special
+  casing. `/home`'s newspaper preview imports `articles` directly
+  (`featuredArticle = articles[0]`) rather than duplicating any article
+  data — array order is "most recent first" and also drives what's
+  featured on `/home`.
+  - `/newspaper/[slug]/page.tsx` is the dynamic route for plain-text
+    articles: date, 40px title, divider, body at 18px/1.9 line-height
+    capped at 680px (paragraphs split from `content` on blank lines,
+    `white-space: pre-line` so single `\n`s inside a paragraph still
+    break), closing with a right-aligned italic attribution line (omitted
+    if empty), "← Back to Newspaper" at top. `generateStaticParams`
+    excludes `cardNews` articles (they're pre-rendered by their own
+    dedicated page instead); `notFound()` for an unknown slug, and a
+    `redirect("/newspaper")` safety net if a `cardNews` article is ever
+    reached here directly (shouldn't happen — see below).
+  - A `cardNews: true` article instead gets a *dedicated* page at
+    `src/app/newspaper/<slug>/page.tsx` — Next.js always matches that
+    static segment before the `[slug]` dynamic one for the same URL, so it
+    takes over entirely; `content`/`closing` stay empty strings and are
+    unused for these. `src/app/newspaper/nates-brain-part1/page.tsx` is
+    the first example: a vertical-scroll deck of fixed-aspect-ratio
+    (1080:1350) cards, Archivo + Bangers loaded via raw `<link
+    rel="stylesheet">` tags rendered straight in the page (React 19
+    hoists them into `<head>` automatically — no `next/font` needed for a
+    one-off like this), each card's copy/colors hardcoded in that file
+    rather than in `articles.ts`. To add another card-news piece, copy
+    this page's pattern into a new `src/app/newspaper/<slug>/page.tsx` and
+    add a matching `cardNews: true` entry to `articles.ts` for it to show
+    in the listing/home preview.
 - `/contact` — dark sage block with mailto link (`whyeatlab@gmail.com`)
   beside the `ContactForm` component.
 - `/product` — placeholder only, to be designed later.
