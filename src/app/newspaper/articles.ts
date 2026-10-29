@@ -14,7 +14,7 @@ export type Article = {
 export const articles: Article[] = [
   {
     slug: "nates-brain-part1",
-    title: "Nate's Brain — Part 1: The Coffee Shock",
+    title: "Nate's Brain — Part 1",
     date: "October 28, 2026",
     preview:
       "Are we drinking coffee, or are we soothing a brain that has lost its ability to self-recover?",
